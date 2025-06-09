@@ -1,0 +1,200 @@
+<?php
+/**
+ * Dashboard Template
+ * v1.0.0 - Main dashboard interface for index management
+ *
+ * @var \RmParts\IndexManager\Block\Adminhtml\Dashboard $block
+ */
+?>
+
+<div id="index-manager-dashboard" class="index-manager-container">
+    
+    <!-- Header Section -->
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Index Manager Dashboard')) ?></span>
+            <div class="page-actions">
+                <button id="refresh-status-btn" class="action-default scalable" type="button">
+                    <span><?= $block->escapeHtml(__('Refresh Status')) ?></span>
+                </button>
+                <button id="auto-refresh-toggle" class="action-secondary" type="button" data-auto="false">
+                    <span><?= $block->escapeHtml(__('Auto-Refresh: OFF')) ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Overview Cards -->
+    <div class="admin__page-section">
+        <div class="status-cards-grid">
+            
+            <!-- Elasticsearch Status Card -->
+            <div class="status-card elasticsearch-card">
+                <div class="card-header">
+                    <h3><?= $block->escapeHtml(__('Elasticsearch Status')) ?></h3>
+                    <div id="es-status-indicator" class="status-indicator unknown"></div>
+                </div>
+                <div class="card-body">
+                    <div id="es-cluster-health" class="metric">
+                        <span class="label"><?= $block->escapeHtml(__('Cluster Health:')) ?></span>
+                        <span class="value">Loading...</span>
+                    </div>
+                    <div id="es-indices-count" class="metric">
+                        <span class="label"><?= $block->escapeHtml(__('Magento Indices:')) ?></span>
+                        <span class="value">Loading...</span>
+                    </div>
+                    <div id="es-total-docs" class="metric">
+                        <span class="label"><?= $block->escapeHtml(__('Total Documents:')) ?></span>
+                        <span class="value">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Processes Card -->
+            <div class="status-card processes-card">
+                <div class="card-header">
+                    <h3><?= $block->escapeHtml(__('Active Processes')) ?></h3>
+                    <div id="processes-count" class="count-badge">0</div>
+                </div>
+                <div class="card-body">
+                    <div id="active-processes-list" class="processes-list">
+                        <?= $block->escapeHtml(__('Loading...')) ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Load Card -->
+            <div class="status-card system-card">
+                <div class="card-header">
+                    <h3><?= $block->escapeHtml(__('System Information')) ?></h3>
+                </div>
+                <div class="card-body">
+                    <div class="metric">
+                        <span class="label"><?= $block->escapeHtml(__('Last Updated:')) ?></span>
+                        <span id="last-updated" class="value">Never</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label"><?= $block->escapeHtml(__('Update Frequency:')) ?></span>
+                        <span class="value">Manual / 30 seconds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indexers Management Section -->
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Indexers Management')) ?></span>
+            <div class="section-actions">
+                <button id="reindex-all-btn" class="action-primary scalable" type="button">
+                    <span><?= $block->escapeHtml(__('Reindex All Invalid')) ?></span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="admin__data-grid-wrap">
+            <table id="indexers-grid" class="admin__table-primary indexers-table">
+                <thead>
+                    <tr>
+                        <th class="data-grid-th"><?= $block->escapeHtml(__('Indexer')) ?></th>
+                        <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
+                        <th class="data-grid-th"><?= $block->escapeHtml(__('Mode')) ?></th>
+                        <th class="data-grid-th"><?= $block->escapeHtml(__('Updated')) ?></th>
+                        <th class="data-grid-th"><?= $block->escapeHtml(__('Actions')) ?></th>
+                    </tr>
+                </thead>
+                <tbody id="indexers-tbody">
+                    <tr>
+                        <td colspan="5" class="loading-row">
+                            <?= $block->escapeHtml(__('Loading indexers...')) ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Elasticsearch Indices Details -->
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Elasticsearch Indices & Aliases')) ?></span>
+        </div>
+        
+        <div class="indices-aliases-container">
+            
+            <!-- Indices Table -->
+            <div class="indices-section">
+                <h4><?= $block->escapeHtml(__('Indices')) ?></h4>
+                <div class="admin__data-grid-wrap">
+                    <table id="indices-grid" class="admin__table-secondary">
+                        <thead>
+                            <tr>
+                                <th><?= $block->escapeHtml(__('Index Name')) ?></th>
+                                <th><?= $block->escapeHtml(__('Health')) ?></th>
+                                <th><?= $block->escapeHtml(__('Status')) ?></th>
+                                <th><?= $block->escapeHtml(__('Documents')) ?></th>
+                                <th><?= $block->escapeHtml(__('Size')) ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="indices-tbody">
+                            <tr>
+                                <td colspan="5" class="loading-row">
+                                    <?= $block->escapeHtml(__('Loading indices...')) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Aliases Table -->
+            <div class="aliases-section">
+                <h4><?= $block->escapeHtml(__('Aliases')) ?></h4>
+                <div class="admin__data-grid-wrap">
+                    <table id="aliases-grid" class="admin__table-secondary">
+                        <thead>
+                            <tr>
+                                <th><?= $block->escapeHtml(__('Alias')) ?></th>
+                                <th><?= $block->escapeHtml(__('Index')) ?></th>
+                                <th><?= $block->escapeHtml(__('Status')) ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="aliases-tbody">
+                            <tr>
+                                <td colspan="3" class="loading-row">
+                                    <?= $block->escapeHtml(__('Loading aliases...')) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <div class="loading-text"><?= $block->escapeHtml(__('Processing...')) ?></div>
+    </div>
+</div>
+
+<!-- Messages Container -->
+<div id="messages-container" class="messages-container"></div>
+
+<script type="text/x-magento-init">
+{
+    "#index-manager-dashboard": {
+        "RmParts_IndexManager/js/dashboard": {
+            "statusUrl": "<?= $block->escapeUrl($block->getStatusUrl()) ?>",
+            "reindexUrl": "<?= $block->escapeUrl($block->getReindexUrl()) ?>",
+            "formKey": "<?= $block->escapeJs($block->getFormKey()) ?>",
+            "initialIndexers": <?= $block->getInitialIndexersData() ?>,
+            "initialElasticsearch": <?= $block->getInitialElasticsearchData() ?>
+        }
+    }
+}
+</script>
