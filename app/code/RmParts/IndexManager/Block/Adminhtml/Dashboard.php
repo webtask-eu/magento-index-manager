@@ -52,7 +52,7 @@ class Dashboard extends Template
     {
         try {
             $data = $this->statusProvider->getIndexersStatus();
-            return json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+            return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             return '[]';
         }
@@ -65,7 +65,7 @@ class Dashboard extends Template
     {
         try {
             $data = $this->statusProvider->getElasticsearchStatus();
-            return json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+            return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             return '{"error": "Failed to load Elasticsearch data"}';
         }

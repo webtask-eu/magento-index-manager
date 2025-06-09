@@ -192,9 +192,9 @@
             "statusUrl": "<?= $block->escapeUrl($block->getStatusUrl()) ?>",
             "reindexUrl": "<?= $block->escapeUrl($block->getReindexUrl()) ?>",
             "formKey": "<?= $block->escapeJs($block->getFormKey()) ?>",
-            "initialIndexers": <?= $block->getInitialIndexersData() ?>,
-            "initialElasticsearch": <?= $block->getInitialElasticsearchData() ?>
+            "initialIndexers": <?= /* @noEscape */ $block->getInitialIndexersData() ?>,
+            "initialElasticsearch": <?= /* @noEscape */ $block->getInitialElasticsearchData() ?>
         }
     }
 }
-</script>
+</script> 
