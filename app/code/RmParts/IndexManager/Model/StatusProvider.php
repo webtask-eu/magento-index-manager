@@ -75,22 +75,22 @@ class StatusProvider
             // Get cluster health
             $this->curl->get($host . '/_cluster/health');
             $healthResponse = $this->curl->getBody();
-            $health = $this->serializer->unserialize($healthResponse);
+            $health = $this->parseJsonSafely($healthResponse);
 
             // Get indices info
             $this->curl->get($host . '/_cat/indices?format=json');
             $indicesResponse = $this->curl->getBody();
-            $indices = $this->serializer->unserialize($indicesResponse);
+            $indices = $this->parseJsonSafely($indicesResponse);
 
             // Get aliases info
             $this->curl->get($host . '/_cat/aliases?format=json');
             $aliasesResponse = $this->curl->getBody();
-            $aliases = $this->serializer->unserialize($aliasesResponse);
+            $aliases = $this->parseJsonSafely($aliasesResponse);
 
             return [
-                'health' => $health,
-                'indices' => $this->filterMagentoIndices($indices),
-                'aliases' => $this->filterMagentoAliases($aliases),
+                'health' => $health ?: ['status' => 'unknown'],
+                'indices' => $this->filterMagentoIndices($indices ?: []),
+                'aliases' => $this->filterMagentoAliases($aliases ?: []),
                 'host' => $host,
                 'status' => 'connected'
             ];
@@ -199,5 +199,34 @@ class StatusProvider
                    (strpos($alias['alias'], 'magento2') !== false || 
                     strpos($alias['alias'], 'catalog') !== false);
         });
+    }
+
+    /**
+     * v1.0.0 - Safely parse JSON with error handling
+     */
+    protected function parseJsonSafely($jsonString)
+    {
+        if (empty($jsonString)) {
+            return null;
+        }
+
+        try {
+            // Clean the JSON string
+            $jsonString = trim($jsonString);
+            
+            // Check if it's valid JSON
+            $data = json_decode($jsonString, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('JSON decode error: ' . json_last_error_msg());
+            }
+            
+            return $data;
+            
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            error_log('JSON Parse Error in IndexManager: ' . $e->getMessage() . ' | JSON: ' . substr($jsonString, 0, 200));
+            return null;
+        }
     }
 }

@@ -50,9 +50,12 @@ class Dashboard extends Template
      */
     public function getInitialIndexersData()
     {
-        return $this->_escaper->escapeHtml(
-            json_encode($this->statusProvider->getIndexersStatus())
-        );
+        try {
+            $data = $this->statusProvider->getIndexersStatus();
+            return json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        } catch (\Exception $e) {
+            return '[]';
+        }
     }
 
     /**
@@ -60,9 +63,12 @@ class Dashboard extends Template
      */
     public function getInitialElasticsearchData()
     {
-        return $this->_escaper->escapeHtml(
-            json_encode($this->statusProvider->getElasticsearchStatus())
-        );
+        try {
+            $data = $this->statusProvider->getElasticsearchStatus();
+            return json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        } catch (\Exception $e) {
+            return '{"error": "Failed to load Elasticsearch data"}';
+        }
     }
 
     /**
