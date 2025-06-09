@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Dashboard Layout Configuration
+ * v1.0.0 - Main dashboard layout for index management interface
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Index Manager Dashboard</title>
+        <css src="RmParts_IndexManager::css/dashboard.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="RmParts\IndexManager\Block\Adminhtml\Dashboard"
+                   name="indexmanager.dashboard"
+                   template="RmParts_IndexManager::dashboard/index.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
