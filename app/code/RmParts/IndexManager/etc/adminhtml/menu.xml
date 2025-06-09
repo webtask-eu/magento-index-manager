@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Admin Menu Configuration for IndexManager
+ * v1.0.0 - Creates menu item under System for index management
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="RmParts_IndexManager::indexmanager"
+             title="Index Manager"
+             module="RmParts_IndexManager"
+             sortOrder="100"
+             parent="Magento_Backend::system_other_settings"
+             action="indexmanager/dashboard/index"
+             resource="RmParts_IndexManager::manage"/>
+    </menu>
+</config>
